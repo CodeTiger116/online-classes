@@ -29,12 +29,12 @@ public class AliYunLiveConfig {
     /**
      * 推流鉴权url key
      */
-    @Value("AZOtTPWBbtlFEpJh")
+    @Value("*******")
     private String aliyunLivePushIdentKey;
     /**
      * 拉流鉴权url key
      */
-    @Value("nmMmDi7Z1MABpkqx")
+    @Value("************")
     private String aliyunLivePullIdentKey;
 
     /**
@@ -51,13 +51,13 @@ public class AliYunLiveConfig {
     /**
      * OSS-RAM 访问控制-人员管理-用户 AccessKey
      */
-    @Value("LTAI5t81U4hLZdzQRnWDawDb")
+    @Value("*************")
     private String accessKeyId;
 
     /**
      * OSS-RAM 访问控制-人员管理-用户 secret
      */
-    @Value("6BkKEoeN7YcIaDaCUExDLB1VSN8o65")
+    @Value("**************")
     private String secret;
 
 
