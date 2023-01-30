@@ -1,0 +1,82 @@
+server:
+  #端口
+  port: 8081
+
+
+
+spring:
+
+  main:
+    allow-circular-references: true
+
+  #数据源配置
+  datasource:
+    username: root
+    password: 123456
+    url: "jdbc:mysql://localhost:3306/online_classes?zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxWait: 60000
+
+  # Redis配置
+  redis:
+    timeout: 10000ms                        # 连接超时时间
+    host: 192.168.247.131                   # Redis服务器地址
+    port: 6379                              # Redis服务器端口
+    database: 0                             # 选择哪个库，默认0库
+    password: root                          #密码
+    lettuce:
+      pool:
+        max-active: 1024                    # 最大连接数，默认 8
+        max-wait: 10000ms                   # 最大连接阻塞等待时间，单位毫秒，默认 -1
+        max-idle: 200                       # 最大空闲连接，默认 8
+        min-idle: 5                          # 最小空闲连接，默认 0
+
+#  阿里云oss上传文件大小限制，默认1MB
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+
+
+
+mybatis-plus:
+  #配置Mapper映射文件
+  mapper-locations: classpath*:/mapper/*Mapper.xml
+  # 配置MyBatis数据返回类型别名（默认别名是类名）
+  type-aliases-package: com.hanhu.server.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+logging:
+  level:
+    com.hanhu.serve.mapper: debug
+
+
+jwt:
+  # JWT存储的请求头
+  tokenHeader: Authorization
+  # JWT 加解密使用的密钥
+  secret: yeb-secret
+  # JWT的超期限时间（60*60*24）24小时
+  expiration: 604800
+  # JWT 负载中拿到开头
+  tokenHead: Bearer
+
+
+
+oss:
+  #外网访问节点
+  endpoint: https://oss-cn-beijing.aliyuncs.com
+
+  accessKeyId: LTAI5t81U4hLZdzQRnWDawDb
+
+  secretAccessKey: 6BkKEoeN7YcIaDaCUExDLB1VSN8o65
+
+  bucketName: online-classes
+  #bucketName+endpoint
+  urlPrefix: http://online-classes.oss-cn-beijing.aliyuncs.com/

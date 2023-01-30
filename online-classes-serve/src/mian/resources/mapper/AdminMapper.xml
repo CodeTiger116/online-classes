@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hanhu.serve.mapper.AdminMapper">
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hanhu.serve.entity.Admin">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="name" property="name" />
+        <result column="gender" property="gender" />
+        <result column="birthday" property="birthday" />
+        <result column="idCard" property="idCard" />
+        <result column="phone" property="phone" />
+        <result column="address" property="address" />
+        <result column="email" property="email" />
+        <result column="isInSchool" property="isInSchool" />
+        <result column="userFace" property="userFace" />
+        <result column="isStudent" property="isStudent" />
+        <result column="enabled" property="enabled" />
+        <result column="enrollmentTime" property="enrollmentTime" />
+        <result column="majorId" property="majorId" />
+        <result column="gradeId" property="gradeId" />
+    </resultMap>
+
+    <!--获取所有成员-->
+    <resultMap id="AllStudents" type="com.hanhu.serve.entity.Admin" extends="BaseResultMap">
+        <collection property="roles" ofType="com.hanhu.serve.entity.Role">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+            <result column="rnameZh" property="nameZh"/>
+        </collection>
+
+        <collection property="major" javaType="com.hanhu.serve.entity.Major">
+            <id column="m_id" property="id"/>
+            <result column="mName" property="majorName"/>
+        </collection>
+
+        <collection property="grades" javaType="com.hanhu.serve.entity.Grades">
+            <id column="gid" property="id"/>
+            <result column="gName" property="gradeName"/>
+        </collection>
+
+    </resultMap>
+
+    <!--根据课程id查询学生-->
+    <resultMap id="AllCourseStudents" type="com.hanhu.serve.entity.Admin" extends="BaseResultMap">
+<!--        <collection property="courses" ofType="com.hanhu.serve.entity.Courses">-->
+<!--            <id column="cid" property="id" />-->
+<!--            <result column="cname" property="courseName" />-->
+<!--        </collection>-->
+        <collection property="roles" ofType="com.hanhu.serve.entity.Role">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+            <result column="rnameZh" property="nameZh"/>
+        </collection>
+
+        <collection property="major" javaType="com.hanhu.serve.entity.Major">
+            <id column="m_id" property="id"/>
+            <result column="mName" property="majorName"/>
+        </collection>
+
+        <collection property="grades" javaType="com.hanhu.serve.entity.Grades">
+            <id column="gid" property="id"/>
+            <result column="gName" property="gradeName"/>
+        </collection>
+    </resultMap>
+
+
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, username, password, name, gender, birthday, idCard, phone, address, email, isInSchool, userFace, isStudent, enabled, enrollmentTime, majorId, gradeId
+    </sql>
+
+
+
+    <!--获取所有成员(分页)-->
+    <select id="getAllStudentsByPage" resultMap="AllStudents">
+
+        SELECT
+            a.*,
+            r.id AS rid,
+            r.name AS rname,
+            r.nameZh AS rnameZh,
+            m.id AS m_id,
+            m.majorName AS mName,
+            g.id AS gid,
+            g.gradeName AS gName
+        FROM
+
+            tb_admin a
+                LEFT JOIN
+            tb_admin_role ar ON  a.id = ar.`adminId`
+                LEFT JOIN
+            tb_role r ON r.id = ar.`rid`
+                LEFT JOIN
+            tb_major m ON a.majorId = m.id
+                LEFT JOIN
+            tb_grades g ON a.gradeId = g.id
+
+        WHERE
+            a.`id` != #{id}
+            AND a.`isStudent` = 1
+        <if test="null != students.name and '' != students.name ">
+            AND a.name like concat('%',#{students.name},'%')
+        </if>
+        <if test="null != students.gender and '' != students.gender ">
+            AND a.gender = #{students.gender}
+        </if>
+        <if test="null != students.isInSchool and '' != students.isInSchool ">
+            AND a.isInSchool = #{students.isInSchool}
+        </if>
+        <if test="null != students.gradeId and '' != students.gradeId ">
+            AND a.students.gradeId = #{students.gradeId}
+        </if>
+        <if test="null != students.majorId and '' != students.majorId ">
+            AND a.admin.majorId = #{students.majorId}
+        </if>
+
+        <if test="null != beginDateScope and 2 == beginDateScope.length">
+            AND a.enrollmentTime between #{beginDateScope[0]} and #{beginDateScope[1]}
+        </if>
+        ORDER BY a.`id`
+    </select>
+
+
+    <!--获取所有成员(可重写，传参为id，默认为null)-->
+    <select id="getStudent" resultMap="AllCourseStudents">
+
+        SELECT
+        a.*,
+        r.id AS rid,
+        r.name AS rname,
+        r.nameZh AS rnameZh,
+        m.id AS m_id,
+        m.majorName AS mName,
+        g.id AS gid,
+        g.gradeName AS gName
+        FROM
+
+        tb_admin a
+        LEFT JOIN
+        tb_admin_role ar ON  a.id = ar.`adminId`
+        LEFT JOIN
+        tb_role r ON r.id = ar.`rid`
+        LEFT JOIN
+        tb_major m ON a.majorId = m.id
+        LEFT JOIN
+        tb_grades g ON a.gradeId = g.id
+
+        WHERE
+        a.`id` != 1
+        AND a.`isStudent` = 1
+
+        <if test="null != id">
+            AND a.`id` = #{id}
+        </if>
+        ORDER BY a.`id`
+    </select>
+
+
+
+    <!--根据课程id查询学生-->
+    <select id="getAdminByCourseId"  resultMap="AllCourseStudents">
+        SELECT DISTINCT
+            a.*,
+            r.id AS rid,
+            r.name AS rname,
+            r.nameZh AS rnameZh,
+            m.id AS m_id,
+            m.majorName AS mName,
+            g.id AS gid,
+            g.gradeName AS gName,
+            c.id AS cid,
+            c.courseName AS cname
+        FROM
+            tb_courses c,
+            tb_user_courses uc,
+            tb_admin a
+                LEFT JOIN
+            tb_admin_role ar ON  a.id = ar.`adminId`
+                LEFT JOIN
+            tb_role r ON r.id = ar.`rid`
+                LEFT JOIN
+            tb_major m ON a.majorId = m.id
+                LEFT JOIN
+            tb_grades g ON a.gradeId = g.id
+
+        WHERE
+            c.`id` = uc.`courseId`
+          AND
+            a.`id` = uc.`adminId`
+          AND
+            c.id = #{cid}
+          AND
+            a.`isStudent` = #{n}
+
+    </select>
+
+
+
+
+    <!--根据关键词获取成员-->
+    <select id="getChatUser" resultMap="AllStudents">
+
+        SELECT
+            a.*,
+            r.id AS rid,
+            r.name AS rname,
+            r.nameZh AS rnameZh,
+            m.id AS m_id,
+            m.majorName AS mName,
+            g.id AS gid,
+            g.gradeName AS gName
+        FROM
+
+            tb_admin a
+                LEFT JOIN
+            tb_admin_role ar ON  a.id = ar.`adminId`
+                LEFT JOIN
+            tb_role r ON r.id = ar.`rid`
+                LEFT JOIN
+            tb_major m ON a.majorId = m.id
+                LEFT JOIN
+            tb_grades g ON a.gradeId = g.id
+
+        WHERE
+        a.id != 1
+        <if test="null!=keywords and ''!=keywords">
+            AND a.`name` LIKE CONCAT( '%', #{keywords}, '%' )
+        </if>
+
+        ORDER BY a.`id`
+    </select>
+
+
+
+</mapper>

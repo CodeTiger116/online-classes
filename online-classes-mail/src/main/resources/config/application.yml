@@ -1,0 +1,42 @@
+server:
+  port: 8082
+spring:
+  # 邮件配置
+  mail:
+    # 邮件服务器地址
+    host: smtp.163.com
+    # 协议
+    protocol: smtp
+    # 编码格式
+    default-encoding: utf-8
+    # 授权码（在邮箱中开通smtp服务时获取）
+    password: ZJSWPRTMGYDVJMJT
+    # 我的邮箱地址
+    username: 13253347105@163.com
+    # 端口号（不同邮箱端口号不同）
+    port: 25
+
+  # rabbitmq配置
+  rabbitmq:
+    #服务器地址
+    host: 192.168.10.100
+    # 端口
+    port: 5672
+    # 用户名
+    username: guest
+    # 密码
+    password: guest
+
+  # redis配置
+  redis:
+    host: 192.168.10.100
+    port: 6379
+    database: 0
+    timeout: 10000ms
+    password: root
+    lettuce:
+      pool:
+        max-active: 1024
+        max-wait: 10000ms
+        max-idle: 200
+        min-idle: 5

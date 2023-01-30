@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hanhu.serve.mapper.FileMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hanhu.serve.entity.File">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="trueName" property="trueName" />
+        <result column="fileSize" property="fileSize" />
+        <result column="uploadTime" property="uploadTime" />
+        <result column="fileType" property="fileType" />
+        <result column="fileUrl" property="fileUrl" />
+        <result column="uploadUser" property="uploadUser" />
+        <result column="isExist" property="exist" />
+
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, trueName, fileSize, uploadTime, fileType, fileUrl, uploadUser, isExist
+    </sql>
+
+    <select id="getFileByKeyWords" resultType="com.hanhu.serve.entity.File">
+        SELECT
+            f.*
+        FROM
+            tb_file f
+        <if test="null!=keywords and ''!=keywords">
+            WHERE
+            f.name LIKE CONCAT('%', #{keywords}, '%')
+        </if>
+
+        ORDER BY f.id
+    </select>
+
+</mapper>

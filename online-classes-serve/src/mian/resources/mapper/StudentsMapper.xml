@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hanhu.serve.mapper.StudentsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hanhu.serve.entity.Students">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="name" property="name" />
+        <result column="gender" property="gender" />
+        <result column="birthday" property="birthday" />
+        <result column="idCard" property="idCard" />
+        <result column="phone" property="phone" />
+        <result column="address" property="address" />
+        <result column="email" property="email" />
+        <result column="isInSchool" property="isInSchool" />
+        <result column="userFace" property="userFace" />
+        <result column="isStudent" property="isStudent" />
+        <result column="enabled" property="enabled" />
+        <result column="enrollmentTime" property="enrollmentTime" />
+        <result column="majorId" property="majorId" />
+        <result column="gradeId" property="gradeId" />
+    </resultMap>
+
+    <!--获取所有学生，分页查询-->
+    <resultMap id="StudentsInfo" type="com.hanhu.serve.entity.Students" extends="BaseResultMap">
+        <association property="major" javaType="com.hanhu.serve.entity.Major">
+            <id column="m_id" property="id"/>
+            <result column="mName" property="majorName"/>
+        </association>
+
+        <association property="grades" javaType="com.hanhu.serve.entity.Grades">
+            <id column="gid" property="id"/>
+            <result column="gName" property="gradeName"/>
+        </association>
+
+
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, username, password, name, gender, birthday, idCard, phone, address, email, isInSchool, userFace, isStudent, enabled, enrollmentTime, majorId, gradeId
+    </sql>
+
+
+    <!--获取所有学生，分页查询-->
+    <select id="getAllStudentsByPage" resultMap="StudentsInfo">
+        SELECT
+            s.*,
+            m.id AS m_id,
+            m.majorName AS mName,
+            g.id AS gid,
+            g.gradeName AS gName
+
+        FROM
+            tb_students s,
+            tb_major m,
+            tb_grades g
+
+        WHERE
+            s.`majorId` = m.`id`
+          AND
+            s.`gradeId` = g.`id`
+
+        <if test="null != students.name and '' != students.name ">
+            AND s.name like concat('%',#{students.name},'%')
+        </if>
+        <if test="null != students.gender and '' != students.gender ">
+            AND s.gender = #{students.gender}
+        </if>
+        <if test="null != students.isInSchool and '' != students.isInSchool ">
+            AND s.isInSchool = #{students.isInSchool}
+        </if>
+        <if test="null != students.gradeId and '' != students.gradeId ">
+            AND s.students.gradeId = #{students.gradeId}
+        </if>
+        <if test="null != students.majorId and '' != students.majorId ">
+            AND s.students.majorId = #{students.majorId}
+        </if>
+
+        <if test="null != beginDateScope and 2 == beginDateScope.length">
+            AND s.enrollmentTime between #{beginDateScope[0]} and #{beginDateScope[1]}
+        </if>
+
+        ORDER BY s.`id`
+    </select>
+
+</mapper>

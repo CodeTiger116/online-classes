@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hanhu.serve.mapper.TodoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hanhu.serve.entity.Todo">
+        <id column="id" property="id" />
+        <result column="content" property="content" />
+        <result column="isFinished" property="isFinished" />
+        <result column="adminId" property="adminId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, content, isfinished, adminId
+    </sql>
+
+
+    <!--根据adminId查询待办-->
+    <select id="getMyAllToDo" resultType="com.hanhu.serve.entity.Todo">
+        SELECT
+            todo.`id`,
+            todo.`content`,
+            todo.`isFinished`,
+            todo.`adminId`
+        FROM
+            tb_todo todo
+        WHERE
+            todo.adminId = #{adminId}
+    </select>
+
+    <!--修改待办状态-->
+    <select id="changeToDoStatus" resultType="com.hanhu.serve.entity.Todo">
+        UPDATE
+            tb_todo
+        SET
+            isFinished = ABS(isFinished-1)
+        WHERE
+            id = #{id}
+    </select>
+
+    <!--删除全部已完成-->
+    <select id="removeAllDone" resultType="com.hanhu.serve.entity.Todo">
+        DELETE FROM
+            tb_todo
+        WHERE
+            isFinished = 1
+          AND
+            adminId = #{adminId}
+    </select>
+</mapper>

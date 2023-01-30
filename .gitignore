@@ -1,0 +1,3 @@
+# Project exclude paths
+/online-classes-generator/target/
+/online-classes-serve/target/

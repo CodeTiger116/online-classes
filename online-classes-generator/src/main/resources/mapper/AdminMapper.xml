@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hanhu.generator.mapper.AdminMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hanhu.generator.entity.Admin">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="name" property="name" />
+        <result column="gender" property="gender" />
+        <result column="birthday" property="birthday" />
+        <result column="idCard" property="idCard" />
+        <result column="phone" property="phone" />
+        <result column="address" property="address" />
+        <result column="email" property="email" />
+        <result column="isInSchool" property="inSchool" />
+        <result column="userFace" property="userFace" />
+        <result column="isSchool" property="school" />
+        <result column="enabled" property="enabled" />
+        <result column="enrollmentTime" property="enrollmentTime" />
+        <result column="majorId" property="majorId" />
+        <result column="gradeId" property="gradeId" />
+        <result column="courseId" property="courseId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, username, password, name, gender, birthday, idCard, phone, address, email, isInSchool, userFace, isSchool, enabled, enrollmentTime, majorId, gradeId, courseId
+    </sql>
+
+</mapper>

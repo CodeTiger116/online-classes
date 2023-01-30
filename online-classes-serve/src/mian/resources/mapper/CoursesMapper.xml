@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hanhu.serve.mapper.CoursesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hanhu.serve.entity.Courses">
+        <id column="id" property="id" />
+        <result column="courseName" property="courseName" />
+        <result column="credit" property="credit" />
+        <result column="type" property="type" />
+        <result column="week" property="week" />
+        <result column="jieci" property="jieci" />
+        <result column="isOpen" property="isOpen" />
+        <result column="courseUrl" property="courseUrl" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, courseName, credit, type, week, jieci
+    </sql>
+
+
+
+
+    <!--根据用户id查询课程-->
+    <select id="getCourseByAdminId" resultType="com.hanhu.serve.entity.Courses">
+        SELECT
+            c.*,
+            a.`username` AS ausername,
+            a.`name` AS aname
+        FROM
+            tb_admin a,
+            tb_courses c,
+            tb_user_courses uc
+        WHERE
+            a.id = uc.`adminId`
+          AND
+            c.`id` = uc.`courseId`
+          AND
+            a.`id` = #{id}
+    </select>
+
+</mapper>
