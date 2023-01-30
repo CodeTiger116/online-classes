@@ -73,9 +73,9 @@ oss:
   #外网访问节点
   endpoint: https://oss-cn-beijing.aliyuncs.com
 
-  accessKeyId: LTAI5t81U4hLZdzQRnWDawDb
+  accessKeyId: **************
 
-  secretAccessKey: 6BkKEoeN7YcIaDaCUExDLB1VSN8o65
+  secretAccessKey: ********************
 
   bucketName: online-classes
   #bucketName+endpoint
